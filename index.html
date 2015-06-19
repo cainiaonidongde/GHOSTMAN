@@ -1,48 +1,222 @@
 <!DOCTYPE html>
-<html>
+<html lang="en-us">
   <head>
-    <meta charset='utf-8'>
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
-
-    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
-    <link rel="stylesheet" type="text/css" href="stylesheets/github-dark.css" media="screen">
-    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
-
+    <meta charset="UTF-8">
     <title>Ghostman by cainiaonidongde</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
   </head>
-
   <body>
+    <section class="page-header">
+      <h1 class="project-name">Ghostman</h1>
+      <h2 class="project-tagline">a search algorithm&#39;s demo</h2>
+      <a href="https://github.com/cainiaonidongde/GHOSTMAN" class="btn">View on GitHub</a>
+      <a href="https://github.com/cainiaonidongde/GHOSTMAN/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/cainiaonidongde/GHOSTMAN/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
 
-    <header>
-      <div class="container">
-        <h1>Ghostman</h1>
-        <h2>a search algorithm&#39;s demo</h2>
+    <section class="main-content">
+      <h2>
+<a id="写在前面" class="anchor" href="#%E5%86%99%E5%9C%A8%E5%89%8D%E9%9D%A2" aria-hidden="true"><span class="octicon octicon-link"></span></a>写在前面</h2>
 
-        <section id="downloads">
-          <a href="https://github.com/cainiaonidongde/GHOSTMAN/zipball/master" class="btn">Download as .zip</a>
-          <a href="https://github.com/cainiaonidongde/GHOSTMAN/tarball/master" class="btn">Download as .tar.gz</a>
-          <a href="https://github.com/cainiaonidongde/GHOSTMAN" class="btn btn-github"><span class="icon"></span>View on GitHub</a>
-        </section>
-      </div>
-    </header>
+<ul>
+<li>这是一个关于搜索算法的演示程序，它并不是一个软件，页没有任何商业用途</li>
+<li>它并不是在linux下开发的而是在windows下进行开发的。</li>
+<li>你可以随意下载该演示程序的代码，但是仅供学习，请勿用于任何商业用途</li>
+</ul>
 
-    <div class="container">
-      <section id="main_content">
-        <h3>
-<a id="欢迎来到ghostman" class="anchor" href="#%E6%AC%A2%E8%BF%8E%E6%9D%A5%E5%88%B0ghostman" aria-hidden="true"><span class="octicon octicon-link"></span></a>欢迎来到GHOSTMAN</h3>
+<h2>
+<a id="具体算法" class="anchor" href="#%E5%85%B7%E4%BD%93%E7%AE%97%E6%B3%95" aria-hidden="true"><span class="octicon octicon-link"></span></a>具体算法</h2>
 
-<pre><code>$ cd your_repo_root/repo_name
-$ git fetch origin
-$ git checkout gh-pages
-</code></pre>
+<ul>
+<li>该算法演示程序主要包括以下几个算法
 
-<blockquote>
-<p>这是一个算法演示程序！！！
-睡你妈逼起来嗨，未完待续！！！！</p>
-</blockquote>
-      </section>
-    </div>
+<ul>
+<li>深度优先搜索算法（DFS）</li>
+<li>广度优先搜索算法（BFS）</li>
+<li>A星算法（A*）</li>
+<li>迭代加深的A星算法（IDA*）</li>
+<li>蚁群算法（ACO）</li>
+</ul>
+</li>
+</ul>
 
-    
+<h2>
+<a id="让我先来测试一下代码好了" class="anchor" href="#%E8%AE%A9%E6%88%91%E5%85%88%E6%9D%A5%E6%B5%8B%E8%AF%95%E4%B8%80%E4%B8%8B%E4%BB%A3%E7%A0%81%E5%A5%BD%E4%BA%86" aria-hidden="true"><span class="octicon octicon-link"></span></a>让我先来测试一下代码好了</h2>
+
+<div class="highlight highlight-cpp"><pre>#<span class="pl-k">include</span> <span class="pl-s"><span class="pl-pds">&lt;</span>cstdio<span class="pl-pds">&gt;</span></span>
+#<span class="pl-k">include</span> <span class="pl-s"><span class="pl-pds">&lt;</span>cstring<span class="pl-pds">&gt;</span></span>
+#<span class="pl-k">include</span> <span class="pl-s"><span class="pl-pds">&lt;</span>algorithm<span class="pl-pds">&gt;</span></span>
+<span class="pl-k">using</span> <span class="pl-k">namespace</span> <span class="pl-en">std</span><span class="pl-k">;</span>
+
+<span class="pl-k">int</span> maze[ <span class="pl-c1">10</span> ][ <span class="pl-c1">10</span> ], t;
+<span class="pl-k">int</span> limit;
+
+<span class="pl-k">bool</span> <span class="pl-en">check</span>(){
+    <span class="pl-k">bool</span> flag = <span class="pl-c1">true</span>;
+    <span class="pl-k">for</span>( <span class="pl-k">int</span> i = <span class="pl-c1">1</span>; i &lt;= <span class="pl-c1">4</span>; ++i ){
+        <span class="pl-k">for</span>( <span class="pl-k">int</span> j = <span class="pl-c1">1</span>; j &lt; <span class="pl-c1">4</span>; ++j ){
+            <span class="pl-k">if</span>( maze[i][j] != maze[i][<span class="pl-c1">4</span>] ){
+                flag = <span class="pl-c1">false</span>;
+                <span class="pl-k">break</span>;
+            }   
+        }
+        <span class="pl-k">if</span>( flag == <span class="pl-c1">false</span> ){
+            <span class="pl-k">break</span>;
+        }
+    }
+    <span class="pl-k">if</span>( flag == <span class="pl-c1">true</span> ){
+        <span class="pl-k">return</span> <span class="pl-c1">true</span>;
+    }
+    <span class="pl-k">for</span>( <span class="pl-k">int</span> i = <span class="pl-c1">1</span>; i &lt;= <span class="pl-c1">4</span>; ++i ){
+        <span class="pl-k">for</span>( <span class="pl-k">int</span> j = <span class="pl-c1">1</span>; j &lt; <span class="pl-c1">4</span>; ++j ){
+            <span class="pl-k">if</span>( maze[j][i] != maze[<span class="pl-c1">4</span>][i] ){
+                flag = <span class="pl-c1">false</span>;
+                <span class="pl-k">break</span>;
+            }   
+        }
+        <span class="pl-k">if</span>( flag == <span class="pl-c1">false</span> ){
+            <span class="pl-k">break</span>;
+        }
+    }   
+    <span class="pl-k">return</span> flag;
+}
+
+<span class="pl-k">int</span> <span class="pl-en">h</span>(){
+    <span class="pl-k">int</span> minn = <span class="pl-c1">0</span>;
+    <span class="pl-k">for</span>( <span class="pl-k">int</span> i = <span class="pl-c1">1</span>; i &lt;= <span class="pl-c1">4</span>; ++i ){      
+        <span class="pl-k">int</span> a[ <span class="pl-c1">5</span> ] = {<span class="pl-c1">0</span>};
+        <span class="pl-k">for</span>( <span class="pl-k">int</span> j = <span class="pl-c1">1</span>; j &lt;= <span class="pl-c1">4</span>; ++j ){
+            a[ maze[i][j] ]++;
+        }
+        <span class="pl-c1">sort</span>( a, a + <span class="pl-c1">5</span> );
+        minn = <span class="pl-c1">4</span> - a[<span class="pl-c1">4</span>];
+    }
+
+    <span class="pl-k">for</span>( <span class="pl-k">int</span> i = <span class="pl-c1">1</span>; i &lt;= <span class="pl-c1">4</span>; ++i ){      
+        <span class="pl-k">int</span> a[ <span class="pl-c1">5</span> ] = {<span class="pl-c1">0</span>};
+        <span class="pl-k">for</span>( <span class="pl-k">int</span> j = <span class="pl-c1">1</span>; j &lt;= <span class="pl-c1">4</span>; ++j ){
+            a[ maze[j][i] ]++;
+        }
+        <span class="pl-c1">sort</span>( a, a + <span class="pl-c1">5</span> );
+        minn  = <span class="pl-c1">min</span>( minn, <span class="pl-c1">4</span> - a[<span class="pl-c1">4</span>] );
+    }
+    <span class="pl-k">return</span> minn;
+}
+
+<span class="pl-k">void</span> <span class="pl-en">L</span>( <span class="pl-k">int</span> r ){
+    <span class="pl-k">int</span> t = maze[r][<span class="pl-c1">1</span>];
+    <span class="pl-k">for</span>( <span class="pl-k">int</span> i = <span class="pl-c1">1</span>; i &lt; <span class="pl-c1">4</span>; ++i ){
+        maze[r][i] = maze[r][i+<span class="pl-c1">1</span>];
+    }
+    maze[r][<span class="pl-c1">4</span>] = t;
+}
+
+<span class="pl-k">void</span> <span class="pl-en">R</span>( <span class="pl-k">int</span> r ){
+    <span class="pl-k">int</span> t = maze[r][<span class="pl-c1">4</span>];
+    <span class="pl-k">for</span>( <span class="pl-k">int</span> i = <span class="pl-c1">4</span>; i &gt;= <span class="pl-c1">2</span>; --i ){
+        maze[r][i] = maze[r][i-<span class="pl-c1">1</span>];
+    }   
+    maze[r][<span class="pl-c1">1</span>] = t;
+}
+
+<span class="pl-k">void</span> <span class="pl-en">U</span>( <span class="pl-k">int</span> c ){
+    <span class="pl-k">int</span> t = maze[<span class="pl-c1">1</span>][c];
+    <span class="pl-k">for</span>( <span class="pl-k">int</span> i = <span class="pl-c1">1</span>; i &lt; <span class="pl-c1">4</span>; ++i ){
+        maze[i][c] = maze[i+<span class="pl-c1">1</span>][c];
+    }   
+    maze[<span class="pl-c1">4</span>][c] = t;
+}
+
+<span class="pl-k">void</span> <span class="pl-en">D</span>( <span class="pl-k">int</span> c ){
+    <span class="pl-k">int</span> t = maze[<span class="pl-c1">4</span>][c];
+    <span class="pl-k">for</span>( <span class="pl-k">int</span> i = <span class="pl-c1">4</span>; i &gt;= <span class="pl-c1">2</span>; --i ){
+        maze[i][c] = maze[i-<span class="pl-c1">1</span>][c];
+    }   
+    maze[<span class="pl-c1">1</span>][c] = t;
+}
+
+<span class="pl-k">bool</span> <span class="pl-en">dfs</span>( <span class="pl-k">int</span> d ){
+    <span class="pl-k">if</span>( d == limit ){
+        <span class="pl-k">return</span> <span class="pl-c1">check</span>();
+    }
+    <span class="pl-k">if</span>( d + <span class="pl-c1">h</span>() &gt; limit ){
+        <span class="pl-k">return</span> <span class="pl-c1">false</span>;
+    }
+
+    <span class="pl-k">for</span>( <span class="pl-k">int</span> i = <span class="pl-c1">1</span>; i &lt;= <span class="pl-c1">4</span>; ++i ){
+        <span class="pl-c1">L</span>( i );
+        <span class="pl-k">if</span>( <span class="pl-c1">dfs</span>( d + <span class="pl-c1">1</span> ) ){
+            <span class="pl-k">return</span> <span class="pl-c1">true</span>;
+        }
+        <span class="pl-c1">R</span>( i );
+    }
+    <span class="pl-k">for</span>( <span class="pl-k">int</span> i = <span class="pl-c1">1</span>; i &lt;= <span class="pl-c1">4</span>; ++i ){
+        <span class="pl-c1">R</span>( i );
+        <span class="pl-k">if</span>( <span class="pl-c1">dfs</span>( d + <span class="pl-c1">1</span> ) ){
+            <span class="pl-k">return</span> <span class="pl-c1">true</span>;
+        }
+        <span class="pl-c1">L</span>( i );
+    }
+    <span class="pl-k">for</span>( <span class="pl-k">int</span> i = <span class="pl-c1">1</span>; i &lt;= <span class="pl-c1">4</span>; ++i ){
+        <span class="pl-c1">U</span>( i );
+        <span class="pl-k">if</span>( <span class="pl-c1">dfs</span>( d + <span class="pl-c1">1</span> ) ){
+            <span class="pl-k">return</span> <span class="pl-c1">true</span>;
+        }
+        <span class="pl-c1">D</span>( i );
+    }
+    <span class="pl-k">for</span>( <span class="pl-k">int</span> i = <span class="pl-c1">1</span>; i &lt;= <span class="pl-c1">4</span>; ++i ){
+        <span class="pl-c1">D</span>( i );
+        <span class="pl-k">if</span>( <span class="pl-c1">dfs</span>( d + <span class="pl-c1">1</span> ) ){
+            <span class="pl-k">return</span> <span class="pl-c1">true</span>;
+        }
+        <span class="pl-c1">U</span>( i );
+    }
+    <span class="pl-k">return</span> <span class="pl-c1">false</span>;
+}
+
+<span class="pl-k">bool</span> <span class="pl-en">IDA_star</span>(){
+    limit = <span class="pl-c1">1</span>;
+    <span class="pl-k">while</span>( <span class="pl-c1">true</span> ){
+        <span class="pl-k">if</span>( limit &gt; <span class="pl-c1">5</span> ){
+            <span class="pl-k">return</span> <span class="pl-c1">false</span>;
+        }
+        <span class="pl-k">if</span>( <span class="pl-c1">dfs</span>( <span class="pl-c1">0</span> ) ){
+            <span class="pl-k">return</span> <span class="pl-c1">true</span>;
+        }
+        limit++;    
+    }
+}
+
+<span class="pl-k">int</span> <span class="pl-en">main</span>(){
+    <span class="pl-c1">scanf</span>( <span class="pl-s"><span class="pl-pds">"</span><span class="pl-c1">%d</span><span class="pl-pds">"</span></span>, &amp;t );
+    <span class="pl-k">while</span>( t-- ){
+        <span class="pl-k">for</span>( <span class="pl-k">int</span> i = <span class="pl-c1">1</span>; i &lt;= <span class="pl-c1">4</span>; ++i ){
+            <span class="pl-k">for</span>( <span class="pl-k">int</span> j = <span class="pl-c1">1</span>; j &lt;= <span class="pl-c1">4</span>; ++j ){
+                <span class="pl-c1">scanf</span>( <span class="pl-s"><span class="pl-pds">"</span><span class="pl-c1">%d</span><span class="pl-pds">"</span></span>, &amp;maze[i][j] );
+            }
+        }
+        <span class="pl-k">if</span>( <span class="pl-c1">IDA_star</span>() ){
+            <span class="pl-c1">printf</span>( <span class="pl-s"><span class="pl-pds">"</span><span class="pl-c1">%d</span><span class="pl-cce">\n</span><span class="pl-pds">"</span></span>, limit );
+        }<span class="pl-k">else</span>{
+            <span class="pl-c1">puts</span>( <span class="pl-s"><span class="pl-pds">"</span>-1<span class="pl-pds">"</span></span> );
+        }
+    }   
+    <span class="pl-k">return</span> <span class="pl-c1">0</span>;
+} </pre></div>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/cainiaonidongde/GHOSTMAN">Ghostman</a> is maintained by <a href="https://github.com/cainiaonidongde">cainiaonidongde</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
+
+    </section>
+
+  
   </body>
 </html>
+
