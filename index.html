@@ -53,7 +53,7 @@
 <ul>
 <li>迷宫寻路部分（用于演示BFS、DFS以及A*算法）</li>
 <li>八数码、井字图部分（用于演示IDA*算法）</li>
-<li>蚁群算法部分（单独用于演示ACO算法）</li>
+<li>模拟退火部分（单独用于演示SA算法）</li>
 </ul>
 </li>
 </ul>
@@ -61,169 +61,61 @@
 <h3>
 <a id="迷宫寻路部分" class="anchor" href="#%E8%BF%B7%E5%AE%AB%E5%AF%BB%E8%B7%AF%E9%83%A8%E5%88%86" aria-hidden="true"><span class="octicon octicon-link"></span></a>迷宫寻路部分</h3>
 
+<ul>
+<li>起点和终点（用于设置起点和终点）</li>
+<li>直接执行（直接运行算法，并得到路径）</li>
+<li>单步执行（单步执行算法）</li>
+<li>静态扩展（算法覆盖范围的静态扩展）</li>
+<li>动态扩展（算法覆盖范围的动态扩展）</li>
+</ul>
+
+<h3>
+<a id="八数码井字图部分" class="anchor" href="#%E5%85%AB%E6%95%B0%E7%A0%81%E4%BA%95%E5%AD%97%E5%9B%BE%E9%83%A8%E5%88%86" aria-hidden="true"><span class="octicon octicon-link"></span></a>八数码、井字图部分</h3>
+
+<ul>
+<li>只支持执行按钮</li>
+<li>两个演示均采用IDA*算法</li>
+<li>点击执行按钮后，将会先进行八数码的演示（左边的的拼图），然后进行井字图的演示</li>
+</ul>
+
+<h3>
+<a id="模拟退火部分" class="anchor" href="#%E6%A8%A1%E6%8B%9F%E9%80%80%E7%81%AB%E9%83%A8%E5%88%86" aria-hidden="true"><span class="octicon octicon-link"></span></a>模拟退火部分</h3>
+
+<ul>
+<li>只支持执行按钮</li>
+<li>红色方块代表火源</li>
+<li>蓝色点代表最安全的位置</li>
+<li>最安全的位置定义为：离火源最远的点。（也就是和最近的那个火源的距离最大的点）</li>
+<li>由于精度误差（这里演示转换为了整型变量），可能有个别点不太精确。</li>
+</ul>
+
 <h2>
-<a id="让我先来测试一下代码好了" class="anchor" href="#%E8%AE%A9%E6%88%91%E5%85%88%E6%9D%A5%E6%B5%8B%E8%AF%95%E4%B8%80%E4%B8%8B%E4%BB%A3%E7%A0%81%E5%A5%BD%E4%BA%86" aria-hidden="true"><span class="octicon octicon-link"></span></a>让我先来测试一下代码好了</h2>
+<a id="开发者" class="anchor" href="#%E5%BC%80%E5%8F%91%E8%80%85" aria-hidden="true"><span class="octicon octicon-link"></span></a>开发者</h2>
 
-<div class="highlight highlight-cpp"><pre>#<span class="pl-k">include</span> <span class="pl-s"><span class="pl-pds">&lt;</span>cstdio<span class="pl-pds">&gt;</span></span>
-#<span class="pl-k">include</span> <span class="pl-s"><span class="pl-pds">&lt;</span>cstring<span class="pl-pds">&gt;</span></span>
-#<span class="pl-k">include</span> <span class="pl-s"><span class="pl-pds">&lt;</span>algorithm<span class="pl-pds">&gt;</span></span>
-<span class="pl-k">using</span> <span class="pl-k">namespace</span> <span class="pl-en">std</span><span class="pl-k">;</span>
+<div class="highlight highlight-cpp"><pre><span class="pl-k">typedef</span> <span class="pl-k">struct</span> <span class="pl-en">WEI_LEE</span>{
+    <span class="pl-k">char</span> college[<span class="pl-c1">233</span>] = <span class="pl-s"><span class="pl-pds">"</span>Chang'an University<span class="pl-pds">"</span></span>;
+    <span class="pl-k">char</span> skill[<span class="pl-c1">233</span>] = <span class="pl-s"><span class="pl-pds">"</span>Algorithm<span class="pl-pds">"</span></span>;
+    <span class="pl-k">char</span> email[<span class="pl-c1">233</span>] = <span class="pl-s"><span class="pl-pds">"</span>605718199@qq.com<span class="pl-pds">"</span></span>;
+}BIGBALLON;
 
-<span class="pl-k">int</span> maze[ <span class="pl-c1">10</span> ][ <span class="pl-c1">10</span> ], t;
-<span class="pl-k">int</span> limit;
 
-<span class="pl-k">bool</span> <span class="pl-en">check</span>(){
-    <span class="pl-k">bool</span> flag = <span class="pl-c1">true</span>;
-    <span class="pl-k">for</span>( <span class="pl-k">int</span> i = <span class="pl-c1">1</span>; i &lt;= <span class="pl-c1">4</span>; ++i ){
-        <span class="pl-k">for</span>( <span class="pl-k">int</span> j = <span class="pl-c1">1</span>; j &lt; <span class="pl-c1">4</span>; ++j ){
-            <span class="pl-k">if</span>( maze[i][j] != maze[i][<span class="pl-c1">4</span>] ){
-                flag = <span class="pl-c1">false</span>;
-                <span class="pl-k">break</span>;
-            }   
-        }
-        <span class="pl-k">if</span>( flag == <span class="pl-c1">false</span> ){
-            <span class="pl-k">break</span>;
-        }
-    }
-    <span class="pl-k">if</span>( flag == <span class="pl-c1">true</span> ){
-        <span class="pl-k">return</span> <span class="pl-c1">true</span>;
-    }
-    <span class="pl-k">for</span>( <span class="pl-k">int</span> i = <span class="pl-c1">1</span>; i &lt;= <span class="pl-c1">4</span>; ++i ){
-        <span class="pl-k">for</span>( <span class="pl-k">int</span> j = <span class="pl-c1">1</span>; j &lt; <span class="pl-c1">4</span>; ++j ){
-            <span class="pl-k">if</span>( maze[j][i] != maze[<span class="pl-c1">4</span>][i] ){
-                flag = <span class="pl-c1">false</span>;
-                <span class="pl-k">break</span>;
-            }   
-        }
-        <span class="pl-k">if</span>( flag == <span class="pl-c1">false</span> ){
-            <span class="pl-k">break</span>;
-        }
-    }   
-    <span class="pl-k">return</span> flag;
-}
+<span class="pl-k">typedef</span> <span class="pl-k">struct</span> <span class="pl-en">JILONG_WAN</span>{
+    <span class="pl-k">char</span> college[<span class="pl-c1">233</span>] = <span class="pl-s"><span class="pl-pds">"</span>Chang'an University<span class="pl-pds">"</span></span>;
+    <span class="pl-k">char</span> skill[<span class="pl-c1">233</span>] = <span class="pl-s"><span class="pl-pds">"</span>Algorithm<span class="pl-pds">"</span></span>;
+    <span class="pl-k">char</span> email[<span class="pl-c1">233</span>] = <span class="pl-s"><span class="pl-pds">"</span>605718199@qq.com<span class="pl-pds">"</span></span>;
+}XXX;
 
-<span class="pl-k">int</span> <span class="pl-en">h</span>(){
-    <span class="pl-k">int</span> minn = <span class="pl-c1">0</span>;
-    <span class="pl-k">for</span>( <span class="pl-k">int</span> i = <span class="pl-c1">1</span>; i &lt;= <span class="pl-c1">4</span>; ++i ){      
-        <span class="pl-k">int</span> a[ <span class="pl-c1">5</span> ] = {<span class="pl-c1">0</span>};
-        <span class="pl-k">for</span>( <span class="pl-k">int</span> j = <span class="pl-c1">1</span>; j &lt;= <span class="pl-c1">4</span>; ++j ){
-            a[ maze[i][j] ]++;
-        }
-        <span class="pl-c1">sort</span>( a, a + <span class="pl-c1">5</span> );
-        minn = <span class="pl-c1">4</span> - a[<span class="pl-c1">4</span>];
-    }
+<span class="pl-k">typedef</span> <span class="pl-k">struct</span> <span class="pl-en">SHIJIE_WENG</span>{
+    <span class="pl-k">char</span> college[<span class="pl-c1">233</span>] = <span class="pl-s"><span class="pl-pds">"</span>Chang'an University<span class="pl-pds">"</span></span>;
+    <span class="pl-k">char</span> skill[<span class="pl-c1">233</span>] = 
+    <span class="pl-k">char</span> email[<span class="pl-c1">233</span>] =
+}XXX;
 
-    <span class="pl-k">for</span>( <span class="pl-k">int</span> i = <span class="pl-c1">1</span>; i &lt;= <span class="pl-c1">4</span>; ++i ){      
-        <span class="pl-k">int</span> a[ <span class="pl-c1">5</span> ] = {<span class="pl-c1">0</span>};
-        <span class="pl-k">for</span>( <span class="pl-k">int</span> j = <span class="pl-c1">1</span>; j &lt;= <span class="pl-c1">4</span>; ++j ){
-            a[ maze[j][i] ]++;
-        }
-        <span class="pl-c1">sort</span>( a, a + <span class="pl-c1">5</span> );
-        minn  = <span class="pl-c1">min</span>( minn, <span class="pl-c1">4</span> - a[<span class="pl-c1">4</span>] );
-    }
-    <span class="pl-k">return</span> minn;
-}
-
-<span class="pl-k">void</span> <span class="pl-en">L</span>( <span class="pl-k">int</span> r ){
-    <span class="pl-k">int</span> t = maze[r][<span class="pl-c1">1</span>];
-    <span class="pl-k">for</span>( <span class="pl-k">int</span> i = <span class="pl-c1">1</span>; i &lt; <span class="pl-c1">4</span>; ++i ){
-        maze[r][i] = maze[r][i+<span class="pl-c1">1</span>];
-    }
-    maze[r][<span class="pl-c1">4</span>] = t;
-}
-
-<span class="pl-k">void</span> <span class="pl-en">R</span>( <span class="pl-k">int</span> r ){
-    <span class="pl-k">int</span> t = maze[r][<span class="pl-c1">4</span>];
-    <span class="pl-k">for</span>( <span class="pl-k">int</span> i = <span class="pl-c1">4</span>; i &gt;= <span class="pl-c1">2</span>; --i ){
-        maze[r][i] = maze[r][i-<span class="pl-c1">1</span>];
-    }   
-    maze[r][<span class="pl-c1">1</span>] = t;
-}
-
-<span class="pl-k">void</span> <span class="pl-en">U</span>( <span class="pl-k">int</span> c ){
-    <span class="pl-k">int</span> t = maze[<span class="pl-c1">1</span>][c];
-    <span class="pl-k">for</span>( <span class="pl-k">int</span> i = <span class="pl-c1">1</span>; i &lt; <span class="pl-c1">4</span>; ++i ){
-        maze[i][c] = maze[i+<span class="pl-c1">1</span>][c];
-    }   
-    maze[<span class="pl-c1">4</span>][c] = t;
-}
-
-<span class="pl-k">void</span> <span class="pl-en">D</span>( <span class="pl-k">int</span> c ){
-    <span class="pl-k">int</span> t = maze[<span class="pl-c1">4</span>][c];
-    <span class="pl-k">for</span>( <span class="pl-k">int</span> i = <span class="pl-c1">4</span>; i &gt;= <span class="pl-c1">2</span>; --i ){
-        maze[i][c] = maze[i-<span class="pl-c1">1</span>][c];
-    }   
-    maze[<span class="pl-c1">1</span>][c] = t;
-}
-
-<span class="pl-k">bool</span> <span class="pl-en">dfs</span>( <span class="pl-k">int</span> d ){
-    <span class="pl-k">if</span>( d == limit ){
-        <span class="pl-k">return</span> <span class="pl-c1">check</span>();
-    }
-    <span class="pl-k">if</span>( d + <span class="pl-c1">h</span>() &gt; limit ){
-        <span class="pl-k">return</span> <span class="pl-c1">false</span>;
-    }
-
-    <span class="pl-k">for</span>( <span class="pl-k">int</span> i = <span class="pl-c1">1</span>; i &lt;= <span class="pl-c1">4</span>; ++i ){
-        <span class="pl-c1">L</span>( i );
-        <span class="pl-k">if</span>( <span class="pl-c1">dfs</span>( d + <span class="pl-c1">1</span> ) ){
-            <span class="pl-k">return</span> <span class="pl-c1">true</span>;
-        }
-        <span class="pl-c1">R</span>( i );
-    }
-    <span class="pl-k">for</span>( <span class="pl-k">int</span> i = <span class="pl-c1">1</span>; i &lt;= <span class="pl-c1">4</span>; ++i ){
-        <span class="pl-c1">R</span>( i );
-        <span class="pl-k">if</span>( <span class="pl-c1">dfs</span>( d + <span class="pl-c1">1</span> ) ){
-            <span class="pl-k">return</span> <span class="pl-c1">true</span>;
-        }
-        <span class="pl-c1">L</span>( i );
-    }
-    <span class="pl-k">for</span>( <span class="pl-k">int</span> i = <span class="pl-c1">1</span>; i &lt;= <span class="pl-c1">4</span>; ++i ){
-        <span class="pl-c1">U</span>( i );
-        <span class="pl-k">if</span>( <span class="pl-c1">dfs</span>( d + <span class="pl-c1">1</span> ) ){
-            <span class="pl-k">return</span> <span class="pl-c1">true</span>;
-        }
-        <span class="pl-c1">D</span>( i );
-    }
-    <span class="pl-k">for</span>( <span class="pl-k">int</span> i = <span class="pl-c1">1</span>; i &lt;= <span class="pl-c1">4</span>; ++i ){
-        <span class="pl-c1">D</span>( i );
-        <span class="pl-k">if</span>( <span class="pl-c1">dfs</span>( d + <span class="pl-c1">1</span> ) ){
-            <span class="pl-k">return</span> <span class="pl-c1">true</span>;
-        }
-        <span class="pl-c1">U</span>( i );
-    }
-    <span class="pl-k">return</span> <span class="pl-c1">false</span>;
-}
-
-<span class="pl-k">bool</span> <span class="pl-en">IDA_star</span>(){
-    limit = <span class="pl-c1">1</span>;
-    <span class="pl-k">while</span>( <span class="pl-c1">true</span> ){
-        <span class="pl-k">if</span>( limit &gt; <span class="pl-c1">5</span> ){
-            <span class="pl-k">return</span> <span class="pl-c1">false</span>;
-        }
-        <span class="pl-k">if</span>( <span class="pl-c1">dfs</span>( <span class="pl-c1">0</span> ) ){
-            <span class="pl-k">return</span> <span class="pl-c1">true</span>;
-        }
-        limit++;    
-    }
-}
-
-<span class="pl-k">int</span> <span class="pl-en">main</span>(){
-    <span class="pl-c1">scanf</span>( <span class="pl-s"><span class="pl-pds">"</span><span class="pl-c1">%d</span><span class="pl-pds">"</span></span>, &amp;t );
-    <span class="pl-k">while</span>( t-- ){
-        <span class="pl-k">for</span>( <span class="pl-k">int</span> i = <span class="pl-c1">1</span>; i &lt;= <span class="pl-c1">4</span>; ++i ){
-            <span class="pl-k">for</span>( <span class="pl-k">int</span> j = <span class="pl-c1">1</span>; j &lt;= <span class="pl-c1">4</span>; ++j ){
-                <span class="pl-c1">scanf</span>( <span class="pl-s"><span class="pl-pds">"</span><span class="pl-c1">%d</span><span class="pl-pds">"</span></span>, &amp;maze[i][j] );
-            }
-        }
-        <span class="pl-k">if</span>( <span class="pl-c1">IDA_star</span>() ){
-            <span class="pl-c1">printf</span>( <span class="pl-s"><span class="pl-pds">"</span><span class="pl-c1">%d</span><span class="pl-cce">\n</span><span class="pl-pds">"</span></span>, limit );
-        }<span class="pl-k">else</span>{
-            <span class="pl-c1">puts</span>( <span class="pl-s"><span class="pl-pds">"</span>-1<span class="pl-pds">"</span></span> );
-        }
-    }   
-    <span class="pl-k">return</span> <span class="pl-c1">0</span>;
-} </pre></div>
+<span class="pl-k">typedef</span> <span class="pl-k">struct</span> <span class="pl-en">ZUOWEN_DAI</span>{
+    <span class="pl-k">char</span> college[<span class="pl-c1">233</span>] = <span class="pl-s"><span class="pl-pds">"</span>Chang'an University<span class="pl-pds">"</span></span>;
+    <span class="pl-k">char</span> skill[<span class="pl-c1">233</span>] = 
+    <span class="pl-k">char</span> email[<span class="pl-c1">233</span>] = 
+}XXX;</pre></div>
 
       <footer class="site-footer">
         <span class="site-footer-owner"><a href="https://github.com/cainiaonidongde/GHOSTMAN">Ghostman</a> is maintained by <a href="https://github.com/cainiaonidongde">cainiaonidongde</a>.</span>
